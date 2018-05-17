@@ -1,0 +1,20 @@
+{
+  "name": "jira-spotlight",
+  "version": "1.0.0",
+  "description": "Jira Spotlight",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": "https://github.com/morzzz007/jira-spotlight",
+  "keywords": [
+    "Electron"
+  ],
+  "devDependencies": {
+    "electron": "2.0.0"
+  },
+  "dependencies": {
+    "axios": "0.18.0",
+    "vue": "2.5.16"
+  }
+}

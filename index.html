@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Hello World!</title>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,500" rel="stylesheet">
+  <style>
+    body {
+      background-color: #282A36;
+      color: #F8F8F2;
+      font-family: 'Roboto', sans-serif;
+      font-size: 20px
+    }
+
+    .issue {
+      padding: 5px 10px;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .issue:hover {
+      background-color: #44475A;
+    }
+
+    .issue-info {
+      font-size: 12px;
+    }
+
+    .issue-status {
+      font-size: 10px;
+      color: #6272A4;
+    }
+
+    .issue-ticketnumber {
+      color: #8BE9FD;
+      margin-right: 5px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <img v-if="loadingIssues" src="assets/grid.svg" style="width: 18px" />
+    <div class="issue" v-for="issue in issues" v-on:click="copyIssueNumber(issue)">
+      <div class="issue-info">
+        <span class="issue-ticketnumber">{{ issue.key }}</span>
+        <span class="issue-status">{{ issue.fields.status.name }}</span>
+      </div>
+      <div class="issue-summary">{{ issue.fields.summary }}</div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script>
+    const axios = require('axios');
+    const config = require('./config');
+    const electron = require('electron');
+    const clipboard = electron.clipboard;
+
+    var app = new Vue({
+      el: '#app',
+      data: function () {
+        return {
+          message: 'Hello Vue!',
+          issues: [],
+          loadingIssues: true
+        }
+      },
+      mounted: function () {
+        this.getAnswer();
+      },
+      methods: {
+        getAnswer: function () {
+          var vm = this
+          this.loadingIssues = true;
+          axios
+            .get(config.url, {
+              auth: {
+                username: config.username,
+                password: config.password
+              }
+            })
+            .then(function (response) {
+              vm.issues = response.data.issues
+              vm.loadingIssues = false;
+            })
+            .catch(function (error) {
+              vm.message = 'Error! Could not reach the API. ' + error
+              vm.loadingIssues = false;
+            });
+        },
+        copyIssueNumber: function(issue){
+          clipboard.writeText(issue.key);
+        }
+      }
+    })
+
+    require('./renderer.js')
+  </script>
+</body>
+
+</html>
