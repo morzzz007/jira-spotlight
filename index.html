@@ -36,66 +36,62 @@
       color: #8BE9FD;
       margin-right: 5px;
     }
+
+    .issue-assignee {
+      font-size: 10px;
+      color: #6272A4;
+      position: absolute;
+      right: 10px;
+    }
+
+    .issue-assignee-image {
+      width: 20px;
+      height: 20px;
+      position: absolute;
+      right: 10px;
+      display: block;
+      top: 20px;
+      border-radius: 10px;
+    }
+
+    .subtask {
+      padding-left: 20px;
+    }
+
+    .subtask .issue-ticketnumber {
+      color: #BD93F9;
+    }
   </style>
 </head>
 
 <body>
   <div id="app">
     <img v-if="loadingIssues" src="assets/grid.svg" style="width: 18px" />
-    <div class="issue" v-for="issue in issues" v-on:click="copyIssueNumber(issue)">
-      <div class="issue-info">
-        <span class="issue-ticketnumber">{{ issue.key }}</span>
-        <span class="issue-status">{{ issue.fields.status.name }}</span>
+    <div v-for="issue in issues">
+      <div class="issue" v-on:click="copyIssueNumber(issue)">
+        <div class="issue-info">
+          <span class="issue-ticketnumber">{{ issue.key }}</span>
+          <span class="issue-status">{{ issue.fields.status.name }}</span>
+          <span class="issue-assignee">{{ issue.fields.assignee.displayName }}</span>
+          <img class="issue-assignee-image" :src="issue.fields.assignee.avatarUrls['48x48']" :alt="issue.fields.assignee.displayName">
+        </div>
+        <div class="issue-summary">{{ issue.fields.summary }}</div>
       </div>
-      <div class="issue-summary">{{ issue.fields.summary }}</div>
+
+      <div v-for="subtask in issue.fields.subtasks">
+        <div class="issue subtask" v-on:click="copyIssueNumber(subtask)">
+          <div class="issue-info">
+            <span class="issue-ticketnumber">{{ subtask.key }}</span>
+            <span class="issue-status">{{ subtask.fields.status.name }}</span>
+          </div>
+          <div class="issue-summary">{{ subtask.fields.summary }}</div>
+        </div>
+      </div>
     </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
   <script>
-    const axios = require('axios');
-    const config = require('./config');
-    const electron = require('electron');
-    const clipboard = electron.clipboard;
-
-    var app = new Vue({
-      el: '#app',
-      data: function () {
-        return {
-          message: 'Hello Vue!',
-          issues: [],
-          loadingIssues: true
-        }
-      },
-      mounted: function () {
-        this.getAnswer();
-      },
-      methods: {
-        getAnswer: function () {
-          var vm = this
-          this.loadingIssues = true;
-          axios
-            .get(config.url, {
-              auth: {
-                username: config.username,
-                password: config.password
-              }
-            })
-            .then(function (response) {
-              vm.issues = response.data.issues
-              vm.loadingIssues = false;
-            })
-            .catch(function (error) {
-              vm.message = 'Error! Could not reach the API. ' + error
-              vm.loadingIssues = false;
-            });
-        },
-        copyIssueNumber: function(issue){
-          clipboard.writeText(issue.key);
-        }
-      }
-    })
-
     require('./renderer.js')
   </script>
 </body>
