@@ -15,8 +15,9 @@ const MenuItem = electron.MenuItem;
 const globalShortcut = electron.globalShortcut;
 
 let mainWindow;
+let tray;
 
-function createWindow() {
+const createWindow = () => {
   const mouseDisplay = electron.screen.getDisplayNearestPoint(electron.screen.getCursorScreenPoint());
 
   mainWindow = new BrowserWindow({
@@ -47,13 +48,13 @@ function createWindow() {
       mainWindow.hide();
     }
   });
-}
+};
 
-function createTray() {
-  const tray = new Tray(path.join(assetsDirectory, 'doge.png'));
+const createTray = () => {
+  tray = new Tray(path.join(assetsDirectory, 'doge.png'));
   tray.on('right-click', toggleWindow);
   tray.on('double-click', toggleWindow);
-  tray.on('click', function(event) {
+  tray.on('click', function() {
     toggleWindow();
   });
 
@@ -77,7 +78,7 @@ function createTray() {
   );
 
   tray.setContextMenu(contextMenu);
-}
+};
 
 app.on('ready', () => {
   createWindow();
