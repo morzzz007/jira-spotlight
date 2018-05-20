@@ -1,5 +1,3 @@
-'use strict';
-
 const _ = require('lodash');
 
 const jiraResponseHandler = issues => {
@@ -13,4 +11,4 @@ const jiraResponseHandler = issues => {
   return _.reject(issues, issue => subTaskKeys.includes(issue.key));
 };
 
-module.exports = jiraResponseHandler;
+export default jiraResponseHandler;

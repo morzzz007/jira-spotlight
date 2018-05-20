@@ -1,5 +1,3 @@
-'use strict';
-
 const electron = require('electron');
 const path = require('path');
 const url = require('url');
@@ -30,7 +28,7 @@ const createWindow = () => {
   mainWindow.setVisibleOnAllWorkspaces(true);
   mainWindow.loadURL(
     url.format({
-      pathname: path.join(__dirname, 'index.html'),
+      pathname: path.join(__dirname, 'dist/index.html'),
       protocol: 'file:',
       slashes: true
     })
