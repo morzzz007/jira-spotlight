@@ -4,7 +4,7 @@
     <div v-for="issue in issues" v-bind:key="issue.id">
       <Issue :issue="issue" :is-subtask="false" v-on:click.native="copyIssueNumber(issue)"></Issue>
       <div v-for="subtask in issue.fields.subtasks"  v-bind:key="subtask.id">
-        <Issue :issue="subtask" :is-subtask="true" v-on:click.native="copyIssueNumber(issue)"></Issue>
+        <Issue :issue="subtask" :is-subtask="true" v-on:click.native="copyIssueNumber(subtask)"></Issue>
       </div>
     </div>
   </div>
