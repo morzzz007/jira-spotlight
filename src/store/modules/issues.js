@@ -6,7 +6,8 @@ const state = {
 };
 
 const getters = {
-  allIssues: state => state.issues
+  allIssues: state => state.issues,
+  issuesLoading: state => state.loading
 };
 
 const actions = {

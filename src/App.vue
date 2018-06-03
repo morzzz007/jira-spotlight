@@ -1,22 +1,26 @@
 <template>
   <div id="app">
     <div class="header-container">
-      <div class="settings-button">
+      <div class="settings-button" v-on:click="loadSettings()">
         <img class="refresh-svg" src="settings.svg" alt="">
         Settings
       </div>
-      <div class="refresh-button">
+      <div class="refresh-button" v-on:click="loadIssues()">
         <img class="refresh-svg" src="sync.svg" alt="">
         Refresh
       </div>
     </div>
-    <div class="issue-container">
+    <div v-if="!settingsVisible" class="issue-container">
       <div v-for="issue in issues" v-bind:key="issue.id">
         <Issue :issue="issue" :is-subtask="false" v-on:click.native="copyIssueNumber(issue)"></Issue>
         <div v-for="subtask in issue.fields.subtasks"  v-bind:key="subtask.id">
           <Issue :issue="subtask" :is-subtask="true" v-on:click.native="copyIssueNumber(subtask)"></Issue>
         </div>
       </div>
+    </div>
+    <div v-if="settingsVisible" class="settings-container">
+      Hello from settings!
+      <button v-on:click="saveAndCloseSettings()">Close</button>
     </div>
   </div>
 </template>
@@ -34,13 +38,15 @@ export default {
     Issue
   },
   computed: mapGetters({
-    issues: 'allIssues'
+    issues: 'allIssues',
+    issuesLoading: 'issuesLoading',
+    settingsVisible: 'showSettings'
   }),
   mounted: function() {
     this.loadIssues();
   },
   methods: {
-    ...mapActions(['loadIssues']),
+    ...mapActions(['loadIssues', 'loadSettings', 'saveAndCloseSettings', 'closeSettings']),
     copyIssueNumber: function(issue) {
       clipboard.writeText(issue.key);
     }
