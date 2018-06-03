@@ -1,59 +1,46 @@
 <template>
   <div id="app">
-    <img v-if="loadingIssues" src="assets/grid.svg" style="width: 18px" />
-    <div v-for="issue in issues" v-bind:key="issue.id">
-      <Issue :issue="issue" :is-subtask="false" v-on:click.native="copyIssueNumber(issue)"></Issue>
-      <div v-for="subtask in issue.fields.subtasks"  v-bind:key="subtask.id">
-        <Issue :issue="subtask" :is-subtask="true" v-on:click.native="copyIssueNumber(subtask)"></Issue>
+    <div class="header-container">
+      <div class="settings-button">
+        <img class="refresh-svg" src="settings.svg" alt="">
+        Settings
+      </div>
+      <div class="refresh-button">
+        <img class="refresh-svg" src="sync.svg" alt="">
+        Refresh
+      </div>
+    </div>
+    <div class="issue-container">
+      <div v-for="issue in issues" v-bind:key="issue.id">
+        <Issue :issue="issue" :is-subtask="false" v-on:click.native="copyIssueNumber(issue)"></Issue>
+        <div v-for="subtask in issue.fields.subtasks"  v-bind:key="subtask.id">
+          <Issue :issue="subtask" :is-subtask="true" v-on:click.native="copyIssueNumber(subtask)"></Issue>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import electron from 'electron'
-import axios from 'axios'
-import { username, password, url } from '../config';
-const clipboard = electron.clipboard;
-import jiraResponseHandler from './lib/jira-response-handler';
+import electron from 'electron';
+import Issue from './components/Issue.vue';
+import { mapGetters, mapActions } from 'vuex';
 
-import Issue from './components/Issue.vue'
+const clipboard = electron.clipboard;
 
 export default {
   name: 'app',
   components: {
     Issue
   },
-  data: function() {
-    return {
-      message: 'Hello Vue!',
-      issues: [],
-      loadingIssues: true
-    };
-  },
+  computed: mapGetters({
+    issues: 'allIssues'
+  }),
   mounted: function() {
-    this.getAnswer();
+    this.loadIssues();
   },
   methods: {
-    getAnswer: function() {
-      var vm = this;
-      this.loadingIssues = true;
-      axios
-        .get(url, {
-          auth: {
-            username,
-            password
-          }
-        })
-        .then(function(response) {
-          vm.issues = jiraResponseHandler(response.data.issues);
-          vm.loadingIssues = false;
-        })
-        .catch(function(error) {
-          vm.message = 'Error! Could not reach the API. ' + error;
-          vm.loadingIssues = false;
-        });
-    },
+    ...mapActions(['loadIssues']),
     copyIssueNumber: function(issue) {
       clipboard.writeText(issue.key);
     }
@@ -68,5 +55,56 @@ body {
   font-family: 'Roboto', sans-serif;
   font-size: 20px;
   margin: 0px;
+}
+
+.header-container {
+  height: 25px;
+  background-color: #191a21;
+  border-bottom: 1px solid #21222c;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.issue-container {
+  position: fixed;
+  width: 100%;
+  height: calc(100% - 25px);
+  overflow: scroll;
+}
+
+.refresh-button {
+  font-size: 10px;
+  position: fixed;
+  right: 0px;
+  top: 0px;
+  text-transform: uppercase;
+  padding-top: 8px;
+  padding-left: 10px;
+  padding-right: 10px;
+  height: 17px;
+  cursor: pointer;
+}
+
+.settings-button {
+  font-size: 10px;
+  position: fixed;
+  right: 79px;
+  top: 0px;
+  text-transform: uppercase;
+  padding-top: 8px;
+  padding-left: 10px;
+  padding-right: 10px;
+  height: 17px;
+  cursor: pointer;
+}
+
+.settings-button:hover,
+.refresh-button:hover {
+  background-color: #343746;
+}
+
+.refresh-svg {
+  height: 8px;
+  width: 8px;
 }
 </style>
