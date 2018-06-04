@@ -11,45 +11,33 @@
       </div>
     </div>
     <div v-if="!settingsVisible" class="issue-container">
-      <div v-for="issue in issues" v-bind:key="issue.id">
-        <Issue :issue="issue" :is-subtask="false" v-on:click.native="copyIssueNumber(issue)"></Issue>
-        <div v-for="subtask in issue.fields.subtasks"  v-bind:key="subtask.id">
-          <Issue :issue="subtask" :is-subtask="true" v-on:click.native="copyIssueNumber(subtask)"></Issue>
-        </div>
-      </div>
+      <IssueList></IssueList>
     </div>
     <div v-if="settingsVisible" class="settings-container">
-      Hello from settings!
-      <button v-on:click="saveAndCloseSettings()">Close</button>
+      <Settings></Settings>
     </div>
   </div>
 </template>
 
 <script>
-import electron from 'electron';
-import Issue from './components/Issue.vue';
+import IssueList from './components/IssueList.vue';
+import Settings from './components/Settings.vue';
 import { mapGetters, mapActions } from 'vuex';
-
-const clipboard = electron.clipboard;
 
 export default {
   name: 'app',
   components: {
-    Issue
+    IssueList,
+    Settings
   },
   computed: mapGetters({
-    issues: 'allIssues',
-    issuesLoading: 'issuesLoading',
     settingsVisible: 'showSettings'
   }),
   mounted: function() {
     this.loadIssues();
   },
   methods: {
-    ...mapActions(['loadIssues', 'loadSettings', 'saveAndCloseSettings', 'closeSettings']),
-    copyIssueNumber: function(issue) {
-      clipboard.writeText(issue.key);
-    }
+    ...mapActions(['loadIssues', 'loadSettings', 'saveAndCloseSettings', 'closeSettings'])
   }
 };
 </script>

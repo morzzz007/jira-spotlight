@@ -9,6 +9,7 @@ app.dock.hide();
 const BrowserWindow = electron.BrowserWindow;
 const Tray = electron.Tray;
 const Menu = electron.Menu;
+const ipcMain = electron.ipcMain;
 const MenuItem = electron.MenuItem;
 const globalShortcut = electron.globalShortcut;
 
@@ -47,6 +48,10 @@ const createWindow = () => {
     }
   });
 };
+
+ipcMain.on('issue-clicked', () => {
+  mainWindow.hide();
+});
 
 const createTray = () => {
   tray = new Tray(path.join(assetsDirectory, 'doge.png'));
