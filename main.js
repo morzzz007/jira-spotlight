@@ -50,7 +50,7 @@ const createWindow = () => {
 };
 
 ipcMain.on('issue-clicked', () => {
-  mainWindow.hide();
+  app.hide();
 });
 
 const createTray = () => {
