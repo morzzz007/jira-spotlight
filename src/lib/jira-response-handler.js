@@ -8,7 +8,9 @@ const jiraResponseHandler = issues => {
     }
   }
 
-  return _.reject(issues, issue => subTaskKeys.includes(issue.key));
+  const issuesWithoutSubtasks = _.reject(issues, issue => subTaskKeys.includes(issue.key));
+  const sorted = _.sortBy(issuesWithoutSubtasks, issue => issue.fields.status.name === 'Done' ? 1 : 0);
+  return sorted;
 };
 
 export default jiraResponseHandler;
