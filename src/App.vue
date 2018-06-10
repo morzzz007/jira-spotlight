@@ -34,10 +34,10 @@ export default {
     settingsVisible: 'showSettings'
   }),
   mounted: function() {
-    this.loadIssues();
+    this.loadApp();
   },
   methods: {
-    ...mapActions(['loadIssues', 'loadSettings', 'saveAndCloseSettings', 'closeSettings'])
+    ...mapActions(['loadApp', 'loadIssues', 'loadSettings', 'saveAndCloseSettings', 'closeSettings'])
   }
 };
 </script>

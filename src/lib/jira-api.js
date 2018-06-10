@@ -1,10 +1,13 @@
 import axios from 'axios';
-import { username, password, url } from '../../config';
 import jiraResponseHandler from './jira-response-handler';
+import electron from 'electron';
+const ipcRenderer = electron.ipcRenderer;
 
 class JiraApi {
   async getIssues() {
-    const response = await axios.get(url, {
+    const { username, password, jiraUrl } = await ipcRenderer.sendSync('get-password');
+
+    const response = await axios.get(jiraUrl, {
       auth: {
         username,
         password

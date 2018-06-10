@@ -7,21 +7,23 @@
     "start": "electron .",
     "serve": "vue-cli-service serve --open",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "rebuild": "electron-rebuild -f -w keytar"
   },
   "repository": "https://github.com/morzzz007/jira-spotlight",
   "keywords": [
     "Electron"
   ],
   "devDependencies": {
+    "@vue/cli-plugin-babel": "3.0.0-beta.10",
+    "@vue/cli-plugin-eslint": "3.0.0-beta.10",
+    "@vue/cli-service": "3.0.0-beta.10",
+    "electron-rebuild": "^1.7.3",
     "eslint": "4.19.1",
     "eslint-config-emarsys": "4.0.0",
     "eslint-plugin-mocha": "5.0.0",
     "eslint-plugin-no-only-tests": "2.0.0",
     "eslint-plugin-security": "1.4.0",
-    "@vue/cli-plugin-babel": "3.0.0-beta.10",
-    "@vue/cli-plugin-eslint": "3.0.0-beta.10",
-    "@vue/cli-service": "3.0.0-beta.10",
     "vue-template-compiler": "2.5.16"
   },
   "babel": {
@@ -32,6 +34,7 @@
   "dependencies": {
     "axios": "0.18.0",
     "electron": "2.0.0",
+    "keytar": "^4.2.1",
     "lodash": "4.17.10",
     "vue": "2.5.16",
     "vuex": "3.0.1"

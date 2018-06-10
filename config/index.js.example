@@ -1,3 +1,0 @@
-export const username = 'a@example.com';
-export const password = 'XZY';
-export const url = 'https://XXX.jira.com/rest/agile/YYY'

@@ -1,7 +1,7 @@
 const electron = require('electron');
 const path = require('path');
 const url = require('url');
-
+const keytar = require('keytar');
 const assetsDirectory = path.join(__dirname, 'assets');
 const app = electron.app;
 app.dock.hide();
@@ -48,6 +48,21 @@ const createWindow = () => {
     }
   });
 };
+
+ipcMain.on('get-password', async event => {
+  const result = await keytar.getPassword('JiraSpotlight', 'App');
+
+  if (result) {
+    event.returnValue = JSON.parse(result);
+  } else {
+    event.returnValue = { };
+  }
+});
+
+ipcMain.on('set-password', async (event, data) => {
+  await keytar.setPassword('JiraSpotlight', 'App', JSON.stringify(data));
+  event.returnValue = { };
+});
 
 ipcMain.on('issue-clicked', () => {
   app.hide();

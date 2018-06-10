@@ -11,9 +11,16 @@ const getters = {
 };
 
 const actions = {
-  async loadIssues({ commit }) {
+  async loadApp({ dispatch }) {
+    dispatch('decryptSettings');
+    dispatch('loadIssues');
+  },
+  async loadIssues({ commit, state }) {
+    if (state.settingsSet === false) return;
+
     const jiraApi = new JiraApi();
     commit('setLoadingStatus', true);
+
     const results = await jiraApi.getIssues();
     commit('setIssues', { issues: results });
     commit('setLoadingStatus', false);
