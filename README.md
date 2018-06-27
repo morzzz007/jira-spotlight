@@ -11,12 +11,19 @@ Never open JIRA again to copy a ticket number, assign or complete an issue. Proo
  - [x] Basic multi desktop support
  - [x] Store credentials in keychain
  - [x] Display subtasks
+ - [ ] Subdomain and BoardId support or parse from JIRA board URL
+ - [ ] Settings view UI
  - [ ] Keyboard support
+ -----
+ - [ ] Electron bundle
  - [ ] Getting started screen
  - [ ] Empty/closed sprint view
  - [ ] Error handling
- - [ ] Electron bundle
+ - [ ] Auto-refresh (5 min. background refresh?)
+ - [ ] Show details of subtasks
  - [ ] Assign to me feature
+ -----
+ - [ ] Detail view
  - [ ] Issue status change support
 
 # Setup
